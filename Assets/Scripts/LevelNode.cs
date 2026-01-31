@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class LevelNode : MonoBehaviour
@@ -8,6 +9,10 @@ public class LevelNode : MonoBehaviour
 
     public void Click()
     {
-        Debug.Log("Clicked level: " + levelIndex);
+        //string sceneName = "Level" + levelIndex;
+        //SceneManager.LoadScene(sceneName);
+
+        // TEMP: all nodes load the same prototype level
+        SceneManager.LoadScene("ComponentIntegrationTest");
     }
 }
