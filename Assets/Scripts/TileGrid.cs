@@ -61,12 +61,12 @@ public class Grid : MonoBehaviour
 
     private void Update()
     {
-        if (moveTimer <= 0.0f)
+        if (moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
         {
             pointerPosition += pointerMove.ReadValue<Vector2>();
+            //if (pointerPosition.x < -xSize / 2 && )
             pointer.transform.position = pointerPosition;
             moveTimer = moveDelay;
-            Debug.Log(pointerMove.ReadValue<Vector2>());
         }
 
         if (moveTimer > 0.0f)

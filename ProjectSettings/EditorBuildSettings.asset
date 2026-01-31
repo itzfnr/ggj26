@@ -15,4 +15,4 @@ EditorBuildSettings:
     path: Assets/Scenes/LevelComplete.unity
     guid: c06a293444346e742978937d2d6bc57d
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bb75ae95c005e74baa4e9c596130288, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: fd91931c106d6ac43996e7f8b025229d, type: 3}
