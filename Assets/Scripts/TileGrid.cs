@@ -34,8 +34,7 @@ public class Grid : MonoBehaviour
 
         pointerMove = inputs.FindAction("PointerMove");
 
-        pointerPosition = new Vector3(-xSize / 2, -ySize / 2, pointer.transform.position.z);
-        pointer.transform.position = pointerPosition;
+        pointerPosition = new Vector3((-xSize / 2) - xOffset, (-ySize / 2) - yOffset, pointer.transform.position.z);
 
         for (int x = -xSize / 2; x < xSize / 2; x++)
         {
@@ -61,15 +60,12 @@ public class Grid : MonoBehaviour
 
     private void Update()
     {
-        if (moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
+        if (moveTimer <= 0.0f)
         {
             pointerPosition += pointerMove.ReadValue<Vector2>();
-            pointerPosition.x = Mathf.Clamp(pointerPosition.x, -xSize / 2, (xSize / 2) - 1);
-            pointerPosition.y = Mathf.Clamp(pointerPosition.y, -ySize / 2, (ySize / 2) - 1);
             pointer.transform.position = pointerPosition;
-            Debug.Log(-xSize / 2);
-            Debug.Log(pointerPosition);
             moveTimer = moveDelay;
+            //Debug.Log(pointerMove.ReadValue<Vector2>());
         }
 
         if (moveTimer > 0.0f)
