@@ -159,6 +159,8 @@ MonoBehaviour:
   inputs: {fileID: -944628639613478452, guid: fd91931c106d6ac43996e7f8b025229d, type: 3}
   pointerDefault: {fileID: 21300000, guid: 30343a57e1149944ab4771da78d97587, type: 3}
   pointerSelected: {fileID: 21300000, guid: 1be9c04a84e3b684d86b5211d1266005, type: 3}
+  moveDelay: 0.125
+  refreshDelay: 3
   colors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}

@@ -26,6 +26,8 @@ public class Grid : MonoBehaviour
     private float moveTimer = 0.0f;
     public float moveDelay = 0.125f;
 
+    public float refreshDelay = 3.0f;
+
     public List<Color> colors; // Possible colours that a tile can be
     public List<GameObject> tiles; // List of tiles currently active on the grid
 
@@ -35,14 +37,19 @@ public class Grid : MonoBehaviour
         xSize = (int)transform.localScale.x; // Set the X size to the X scale of the grid
         ySize = (int)transform.localScale.y; // Set the Y size to the Y scale of the grid
 
-        Color[] previousLeft = new Color[ySize]; // Array of previous colours on the left side
-        Color previousBelow = default; // Previous colour on the bottom side
-
         pointerMove = inputs.FindAction("PointerMove");
         selectTile = inputs.FindAction("SelectTile");
 
         pointerPosition = new Vector3((-xSize / 2) - xOffset, (-ySize / 2) - yOffset, pointer.transform.position.z);
         pointer.transform.position = pointerPosition;
+
+        CreateGrid();
+    }
+
+    private void CreateGrid()
+    {
+        Color[] previousLeft = new Color[ySize]; // Array of previous colours on the left side
+        Color previousBelow = default; // Previous colour on the bottom side
 
         for (int x = -xSize / 2; x < xSize / 2; x++)
         {
@@ -109,17 +116,20 @@ public class Grid : MonoBehaviour
                         }
                         else
                         {
-                            if (previousTile == null)
+                            if (tile.GetComponent<SpriteRenderer>().sprite != null)
                             {
-                                tileObject.Selected();
-                                previousTile = tile;
-                                pointer.GetComponent<SpriteRenderer>().sprite = pointerSelected;
-                            }
-                            else
-                            {
-                                TileSwap(previousTile, tile); // Perform the swap
-                                previousTile.GetComponent<Tile>().Deselect();
-                                previousTile = null;
+                                if (previousTile == null)
+                                {
+                                    tileObject.Selected();
+                                    previousTile = tile;
+                                    pointer.GetComponent<SpriteRenderer>().sprite = pointerSelected;
+                                }
+                                else
+                                {
+                                    TileSwap(previousTile, tile); // Perform the swap
+                                    previousTile.GetComponent<Tile>().Deselect();
+                                    previousTile = null;
+                                }
                             }
                         }
                     }
@@ -142,5 +152,14 @@ public class Grid : MonoBehaviour
         tileB.GetComponent<Tile>().ClearAllMatches();
 
         pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
+
+        StartCoroutine(Refresh());
+    }
+
+    IEnumerator Refresh()
+    {
+        yield return new WaitForSeconds(refreshDelay);
+        tiles = new List<GameObject>();
+        CreateGrid();
     }
 }
