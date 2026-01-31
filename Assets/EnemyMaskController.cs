@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem; // Must have this!
@@ -53,6 +54,9 @@ public class EnemyMaskController : MonoBehaviour
     public AudioSource typingSound;
     public AudioClip typingSoundClip;
 
+    // these are letters that the typing renderer should add more delay to for suspense.
+    private char[] slowLetters = { '.', ',', '!', '?' };
+
     // Update is called once per frame
     void Update()
     {
@@ -68,12 +72,20 @@ public class EnemyMaskController : MonoBehaviour
         // check ifw e have printed all chars
         if (taunts[currentTaunt].Length != narrationText.text.Length)
         {
-            if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - lastTextUpdate >= 15)
+            int delay = 20;
+
+            if (slowLetters.Contains(taunts[currentTaunt][printedChars]))
+            {
+                delay += 150;
+            }
+
+            if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - lastTextUpdate >= delay)
             {
                 narrationText.text = narrationText.text + taunts[currentTaunt][printedChars];
                 printedChars++;
                 Debug.Log(printedChars);
                 lastTextUpdate = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+                typingSound.pitch = Random.Range(0.8f, 1f);
                 typingSound.PlayOneShot(typingSoundClip, 0.5f);
             }
         }

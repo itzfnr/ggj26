@@ -735,11 +735,11 @@ MonoBehaviour:
   narrationText: {fileID: 939175406}
   debugText: {fileID: 783767902}
   taunts:
-  - you cannot kill me i am [name]
-  - nice try you missed
-  - whoops ya missed me
-  - try again oh my goodness
-  - hahahahaha
+  - really?? your aim is atrocious!
+  - it's ok, we all miss occasionally
+  - whoops!! ya missed!
+  - oops... missed me. try again!
+  - haha... you can't aim!
   maskTextures:
   - {fileID: 2800000, guid: 85408c0d3541145428c835a1c09793f3, type: 3}
   - {fileID: 2800000, guid: 6adcbca6745aff443bce13ff9b742f01, type: 3}
