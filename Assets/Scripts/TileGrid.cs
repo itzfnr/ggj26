@@ -35,12 +35,13 @@ public class Grid : MonoBehaviour
         pointerMove = inputs.FindAction("PointerMove");
 
         pointerPosition = new Vector3((-xSize / 2) - xOffset, (-ySize / 2) - yOffset, pointer.transform.position.z);
+        pointer.transform.position = pointerPosition;
 
         for (int x = -xSize / 2; x < xSize / 2; x++)
         {
             for (int y = -ySize / 2; y < ySize / 2; y++)
             {
-                Vector3 newTilePosition = new Vector3((1 * x)-xOffset, (1 * y)-yOffset, tile.transform.position.z); // Calculate position of new tile with offset
+                Vector3 newTilePosition = new Vector3((1 * x) - xOffset, (1 * y) - yOffset, tile.transform.position.z); // Calculate position of new tile with offset
                 GameObject newTile = Instantiate(tile, newTilePosition, tile.transform.rotation); // Create a tile
                 tiles.Add(newTile); // Add newly created tile to the list of tiles
                 newTile.transform.parent = transform; // Set the parent of the tile to the Board
@@ -60,12 +61,15 @@ public class Grid : MonoBehaviour
 
     private void Update()
     {
-        if (moveTimer <= 0.0f)
+        if (moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
         {
             pointerPosition += pointerMove.ReadValue<Vector2>();
+            pointerPosition.x = Mathf.Clamp(pointerPosition.x, (-xSize / 2) - xOffset, ((xSize / 2) - 1) - xOffset);
+            pointerPosition.y = Mathf.Clamp(pointerPosition.y, (-ySize / 2) - yOffset, ((ySize / 2) - 1) - yOffset);
             pointer.transform.position = pointerPosition;
+            Debug.Log(-xSize / 2);
+            Debug.Log(pointerPosition);
             moveTimer = moveDelay;
-            //Debug.Log(pointerMove.ReadValue<Vector2>());
         }
 
         if (moveTimer > 0.0f)
