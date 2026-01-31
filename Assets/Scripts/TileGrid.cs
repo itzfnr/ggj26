@@ -24,7 +24,7 @@ public class Grid : MonoBehaviour
     public Sprite pointerSelected;
 
     private float moveTimer = 0.0f;
-    public float moveDelay = 0.2f;
+    public float moveDelay = 0.125f;
 
     public List<Color> colors; // Possible colours that a tile can be
     public List<GameObject> tiles; // List of tiles currently active on the grid
@@ -68,22 +68,19 @@ public class Grid : MonoBehaviour
 
     private void Update()
     {
-        if (previousTile == null)
-        {
-            pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
-            pointerPosition.x = Mathf.Clamp(pointerPosition.x, ((-xSize / 2) + 1) - xOffset, ((xSize / 2) - 2) - xOffset);
-            pointerPosition.y = Mathf.Clamp(pointerPosition.y, ((-ySize / 2) + 1) - yOffset, ((ySize / 2) - 2) - yOffset);
-        }
-        else
-        {
-            pointer.GetComponent<SpriteRenderer>().sprite = pointerSelected;
-            pointerPosition.x = Mathf.Clamp(pointerPosition.x, previousTile.transform.position.x, previousTile.transform.position.x);
-            pointerPosition.y = Mathf.Clamp(pointerPosition.y, previousTile.transform.position.y, previousTile.transform.position.y);
-        }
-
         if (moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
         {
             pointerPosition += pointerMove.ReadValue<Vector2>();
+            if (previousTile == null)
+            {
+                pointerPosition.x = Mathf.Clamp(pointerPosition.x, (-xSize / 2) - xOffset, (xSize / 2) - 1 - xOffset);
+                pointerPosition.y = Mathf.Clamp(pointerPosition.y, (-ySize / 2) - yOffset, (ySize / 2) - 1 - yOffset);
+            }
+            else
+            {
+                pointerPosition.x = Mathf.Clamp(pointerPosition.x, previousTile.transform.position.x - 1, previousTile.transform.position.x + 1);
+                pointerPosition.y = Mathf.Clamp(pointerPosition.y, previousTile.transform.position.y - 1, previousTile.transform.position.y + 1);
+            }
             pointer.transform.position = pointerPosition;
             moveTimer = moveDelay;
         }
@@ -108,6 +105,7 @@ public class Grid : MonoBehaviour
                         if (tileObject.isSelected)
                         {
                             tileObject.Deselect();
+                            pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
                         }
                         else
                         {
@@ -115,11 +113,13 @@ public class Grid : MonoBehaviour
                             {
                                 tileObject.Selected();
                                 previousTile = tile;
+                                pointer.GetComponent<SpriteRenderer>().sprite = pointerSelected;
                             }
                             else
                             {
                                 TileSwap(previousTile, tile); // Perform the swap
-                                //previousTile.GetComponent<Tile>().Deselect();
+                                previousTile.GetComponent<Tile>().Deselect();
+                                previousTile = null;
                             }
                         }
                     }
@@ -138,10 +138,9 @@ public class Grid : MonoBehaviour
         tileA.GetComponent<SpriteRenderer>().color = tileB.GetComponent<SpriteRenderer>().color;
         tileB.GetComponent<SpriteRenderer>().color = tempColor;
 
-        // Deselect both tiles after swapping
-        //tileB.GetComponent<Tile>().Deselect();
-        //tileA.GetComponent<Tile>().Deselect();
+        tileA.GetComponent<Tile>().ClearAllMatches();
+        tileB.GetComponent<Tile>().ClearAllMatches();
 
-        previousTile = null;
+        pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
     }
 }
