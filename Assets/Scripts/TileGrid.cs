@@ -12,10 +12,16 @@ public class Grid : MonoBehaviour
     public GameObject tile; // Tile prefab for creating the tile grid
     public GameObject pointer;
 
+    private GameObject previousTile;
+
     public InputActionAsset inputs;
     private InputAction pointerMove;
+    private InputAction selectTile;
 
     private Vector2 pointerPosition;
+
+    public Sprite pointerDefault;
+    public Sprite pointerSelected;
 
     private float moveTimer = 0.0f;
     private float moveDelay = 0.2f;
@@ -33,14 +39,16 @@ public class Grid : MonoBehaviour
         Color previousBelow = default; // Previous colour on the bottom side
 
         pointerMove = inputs.FindAction("PointerMove");
+        selectTile = inputs.FindAction("SelectTile");
 
         pointerPosition = new Vector3((-xSize / 2) - xOffset, (-ySize / 2) - yOffset, pointer.transform.position.z);
+        pointer.transform.position = pointerPosition;
 
         for (int x = -xSize / 2; x < xSize / 2; x++)
         {
             for (int y = -ySize / 2; y < ySize / 2; y++)
             {
-                Vector3 newTilePosition = new Vector3((1 * x)-xOffset, (1 * y)-yOffset, tile.transform.position.z); // Calculate position of new tile with offset
+                Vector3 newTilePosition = new Vector3((1 * x) - xOffset, (1 * y) - yOffset, tile.transform.position.z); // Calculate position of new tile with offset
                 GameObject newTile = Instantiate(tile, newTilePosition, tile.transform.rotation); // Create a tile
                 tiles.Add(newTile); // Add newly created tile to the list of tiles
                 newTile.transform.parent = transform; // Set the parent of the tile to the Board
@@ -60,26 +68,80 @@ public class Grid : MonoBehaviour
 
     private void Update()
     {
+        if (previousTile == null)
+        {
+            pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
+            pointerPosition.x = Mathf.Clamp(pointerPosition.x, ((-xSize / 2) + 1) - xOffset, ((xSize / 2) - 2) - xOffset);
+            pointerPosition.y = Mathf.Clamp(pointerPosition.y, ((-ySize / 2) + 1) - yOffset, ((ySize / 2) - 2) - yOffset);
+        }
+        else
+        {
+            pointer.GetComponent<SpriteRenderer>().sprite = pointerSelected;
+            pointerPosition.x = Mathf.Clamp(pointerPosition.x, previousTile.transform.position.x, previousTile.transform.position.x);
+            pointerPosition.y = Mathf.Clamp(pointerPosition.y, previousTile.transform.position.y, previousTile.transform.position.y);
+        }
+
         if (moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
         {
             pointerPosition += pointerMove.ReadValue<Vector2>();
-            pointerPosition.x = Mathf.Clamp(pointerPosition.x, -xSize / 2, (xSize / 2) - 1);
-            pointerPosition.y = Mathf.Clamp(pointerPosition.y, -ySize / 2, (ySize / 2) - 1);
             pointer.transform.position = pointerPosition;
-            Debug.Log(-xSize / 2);
-            Debug.Log(pointerPosition);
             moveTimer = moveDelay;
-            //Debug.Log(pointerMove.ReadValue<Vector2>());
         }
 
         if (moveTimer > 0.0f)
         {
             moveTimer -= Time.deltaTime;
         }
+
+        if (selectTile.triggered)
+        {
+            foreach (GameObject tile in tiles)
+            {
+                // Check if the pointer is on the tile
+                if (tile.transform.position == pointer.transform.position)
+                {
+                    Tile tileObject = tile.GetComponent<Tile>();
+
+                    if (tileObject != null)
+                    {
+                        // If the tile is already selected, deselect it
+                        if (tileObject.isSelected)
+                        {
+                            tileObject.Deselect();
+                        }
+                        else
+                        {
+                            if (previousTile == null)
+                            {
+                                tileObject.Selected();
+                                previousTile = tile;
+                            }
+                            else
+                            {
+                                TileSwap(previousTile, tile); // Perform the swap
+                                //previousTile.GetComponent<Tile>().Deselect();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    void TileSwap(SpriteRenderer sprite)
+    private void TileSwap(GameObject tileA, GameObject tileB)
     {
+        if (tileA.GetComponent<SpriteRenderer>().color == tileB.GetComponent<SpriteRenderer>().color)
+            return;
 
+        // Swap the colors
+        Color tempColor = tileA.GetComponent<SpriteRenderer>().color;
+        tileA.GetComponent<SpriteRenderer>().color = tileB.GetComponent<SpriteRenderer>().color;
+        tileB.GetComponent<SpriteRenderer>().color = tempColor;
+
+        // Deselect both tiles after swapping
+        //tileB.GetComponent<Tile>().Deselect();
+        //tileA.GetComponent<Tile>().Deselect();
+
+        previousTile = null;
     }
 }
