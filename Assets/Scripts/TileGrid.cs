@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Grid : MonoBehaviour
+public class TileGrid : MonoBehaviour
 {
     private int xSize, ySize; // X and Y size of the grid
 
@@ -31,6 +31,8 @@ public class Grid : MonoBehaviour
     public List<Color> colors; // Possible colours that a tile can be
     public List<GameObject> tiles; // List of tiles currently active on the grid
 
+    public List<Sprite> availableTileSprites;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,8 +50,8 @@ public class Grid : MonoBehaviour
 
     private void CreateGrid()
     {
-        Color[] previousLeft = new Color[ySize]; // Array of previous colours on the left side
-        Color previousBelow = default; // Previous colour on the bottom side
+        Sprite[] previousLeft = new Sprite[ySize]; // Array of previous sprites on the left side
+        Sprite previousBelow = null; // Previous sprite on the bottom side
 
         for (int x = -xSize / 2; x < xSize / 2; x++)
         {
@@ -60,15 +62,15 @@ public class Grid : MonoBehaviour
                 tiles.Add(newTile); // Add newly created tile to the list of tiles
                 newTile.transform.parent = transform; // Set the parent of the tile to the Board
 
-                List<Color> possibleColors = new List<Color>(); // Create a list of possible colours
-                possibleColors.AddRange(colors); // Add the colours to the range
-                possibleColors.Remove(previousLeft[(ySize / 2) + y]); // Remove possible colours by reading the colours of the tiles to the left
-                possibleColors.Remove(previousBelow); // Same as above but just for the one below
-                Color newColor = possibleColors[Random.Range(0, possibleColors.Count)]; // Randomise the colour between the minimum and maximum of the remaining possible colours
-                newTile.GetComponent<SpriteRenderer>().color = newColor; // Set the colour of the tile to the randomised colour
+                List<Sprite> possibleSprites = new List<Sprite>(); // Create a list of possible sprites
+                possibleSprites.AddRange(availableTileSprites); // Add the sprites to the range
+                possibleSprites.Remove(previousLeft[(ySize / 2) + y]); // Remove possible sprites by reading the sprites of the tiles to the left
+                possibleSprites.Remove(previousBelow); // Same as above but just for the one below
+                Sprite newSprite = possibleSprites[Random.Range(0, possibleSprites.Count)]; // Randomise the sprite between the minimum and maximum of the remaining possible sprites
+                newTile.GetComponent<SpriteRenderer>().sprite = newSprite; // Set the sprite of the tile to the randomised sprite
 
-                previousLeft[(ySize / 2) + y] = newColor; // Set the previous left to the new possible colours for the next loop
-                previousBelow = newColor; // Same as above for the one below
+                previousLeft[(ySize / 2) + y] = newSprite; // Set the previous left to the new sprite for the next loop
+                previousBelow = newSprite; // Same as above for the one below
             }
         }
     }
@@ -140,13 +142,13 @@ public class Grid : MonoBehaviour
 
     private void TileSwap(GameObject tileA, GameObject tileB)
     {
-        if (tileA.GetComponent<SpriteRenderer>().color == tileB.GetComponent<SpriteRenderer>().color)
+        if (tileA.GetComponent<SpriteRenderer>().sprite == tileB.GetComponent<SpriteRenderer>().sprite)
             return;
 
-        // Swap the colors
-        Color tempColor = tileA.GetComponent<SpriteRenderer>().color;
-        tileA.GetComponent<SpriteRenderer>().color = tileB.GetComponent<SpriteRenderer>().color;
-        tileB.GetComponent<SpriteRenderer>().color = tempColor;
+        // Swap the sprites
+        Sprite tempSprite = tileA.GetComponent<SpriteRenderer>().sprite;
+        tileA.GetComponent<SpriteRenderer>().sprite = tileB.GetComponent<SpriteRenderer>().sprite;
+        tileB.GetComponent<SpriteRenderer>().sprite = tempSprite;
 
         tileA.GetComponent<Tile>().ClearAllMatches();
         tileB.GetComponent<Tile>().ClearAllMatches();
@@ -159,6 +161,11 @@ public class Grid : MonoBehaviour
     IEnumerator Refresh()
     {
         yield return new WaitForSeconds(refreshDelay);
+        foreach(GameObject tile in tiles)
+        {
+            Destroy(tile);
+        }
+
         tiles = new List<GameObject>();
         CreateGrid();
     }

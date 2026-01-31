@@ -502,11 +502,17 @@ MonoBehaviour:
   pointerDefault: {fileID: 21300000, guid: 30343a57e1149944ab4771da78d97587, type: 3}
   pointerSelected: {fileID: 21300000, guid: 1be9c04a84e3b684d86b5211d1266005, type: 3}
   moveDelay: 0.125
+  refreshDelay: 3
   colors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
   tiles: []
+  availableTileSprites:
+  - {fileID: 21300000, guid: a439885aa1a8fcf43ab7c301dbf0b6b9, type: 3}
+  - {fileID: 21300000, guid: 604d2b59d2d160545b35e1895d313cf4, type: 3}
+  - {fileID: 21300000, guid: 3b6eb47080eab2841b7ace04139b2575, type: 3}
+  - {fileID: 21300000, guid: 20c17bb26197a10418e246abedd0de45, type: 3}
 --- !u!212 &850717982
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1199,8 +1205,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe3228f0e877764aabcc37dfab7b2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialEnemyHealth: 10
-  initialPlayerHealth: 10
+  initialEnemyHealth: 50
+  initialPlayerHealth: 50
 --- !u!114 &1515312070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1216,6 +1222,8 @@ MonoBehaviour:
   healthWinStateManager: {fileID: 1515312069}
   canPlayerAttack: 1
   canEnemyAttack: 1
+  isNatureAttackActiveOnEnemy: 0
+  isNatureAttackActiveOnPlayer: 0
 --- !u!1 &1545733070
 GameObject:
   m_ObjectHideFlags: 0

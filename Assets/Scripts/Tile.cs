@@ -9,9 +9,15 @@ public class Tile : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private bool matchFound = false;
 
+    public AttackManager attackManager;
+
     private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        // Get attack manager.
+        GameObject levelController = GameObject.Find("LevelController");
+        attackManager = levelController.GetComponent<AttackManager>();
     }
 
     public void Selected()
@@ -61,12 +67,13 @@ public class Tile : MonoBehaviour
                hit.collider.gameObject != gameObject &&
                hit.collider.GetComponent<SpriteRenderer>() != null &&
                hit.collider.GetComponent<SpriteRenderer>().sprite != null &&
-               hit.collider.GetComponent<SpriteRenderer>().color == spriteRenderer.color)
+               hit.collider.GetComponent<SpriteRenderer>().sprite == spriteRenderer.sprite) // CHANGED: Compare sprites instead of colors
         {
             matchingTiles.Add(hit.collider.gameObject);
             currentPos = hit.collider.transform.position;
             hit = Physics2D.Raycast(currentPos + (Vector3)(castDir * 0.5f), castDir, 1f);
         }
+
         return matchingTiles;
     }
 
@@ -77,6 +84,7 @@ public class Tile : MonoBehaviour
         {
             matchingTiles.AddRange(FindMatch(paths[i]));
         }
+
         if (matchingTiles.Count >= 2)
         {
             for (int i = 0; i < matchingTiles.Count; i++)
@@ -97,6 +105,7 @@ public class Tile : MonoBehaviour
 
         if (matchFound)
         {
+            attackManager.OnAttack(gameObject.GetComponent<SpriteRenderer>().sprite.name);
             spriteRenderer.sprite = null;
             matchFound = false;
         }
