@@ -6,6 +6,8 @@ public class Grid : MonoBehaviour
 {
     private int xSize, ySize; // X and Y size of the grid
 
+    public float xOffset, yOffset; // X and Y offset of the grid
+
     public GameObject tile; // Tile prefab for creating the tile grid
 
     public List<Color> colors; // Possible colours that a tile can be
@@ -24,7 +26,8 @@ public class Grid : MonoBehaviour
         {
             for (int y = -ySize / 2; y < ySize / 2; y++)
             {
-                GameObject newTile = Instantiate(tile, new Vector3(1 * x, 1 * y, tile.transform.position.z), tile.transform.rotation); // Create a tile
+                Vector3 newTilePosition = new Vector3((1 * x)-xOffset, (1 * y)-yOffset, tile.transform.position.z); // Calculate position of new tile with offset
+                GameObject newTile = Instantiate(tile, newTilePosition, tile.transform.rotation); // Create a tile
                 tiles.Add(newTile); // Add newly created tile to the list of tiles
                 newTile.transform.parent = transform; // Set the parent of the tile to the Board
 
