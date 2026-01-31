@@ -83,7 +83,6 @@ public class EnemyMaskController : MonoBehaviour
             {
                 narrationText.text = narrationText.text + taunts[currentTaunt][printedChars];
                 printedChars++;
-                Debug.Log(printedChars);
                 lastTextUpdate = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
                 typingSound.pitch = Random.Range(0.8f, 1f);
                 typingSound.PlayOneShot(typingSoundClip, 0.5f);
