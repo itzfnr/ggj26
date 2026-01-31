@@ -31,7 +31,7 @@
                 {
                     "name": "",
                     "id": "3747f365-cdf7-4705-918a-701928263b12",
-                    "path": "<XInputController>/buttonSouth",
+                    "path": "<XInputController>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
