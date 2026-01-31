@@ -24,7 +24,7 @@ public class Grid : MonoBehaviour
     public Sprite pointerSelected;
 
     private float moveTimer = 0.0f;
-    private float moveDelay = 0.2f;
+    public float moveDelay = 0.2f;
 
     public List<Color> colors; // Possible colours that a tile can be
     public List<GameObject> tiles; // List of tiles currently active on the grid

@@ -499,6 +499,9 @@ MonoBehaviour:
   tile: {fileID: 1775235784856912199, guid: d8d20172aa5f618439f555fb3a372104, type: 3}
   pointer: {fileID: 1747174301}
   inputs: {fileID: -944628639613478452, guid: fd91931c106d6ac43996e7f8b025229d, type: 3}
+  pointerDefault: {fileID: 21300000, guid: 30343a57e1149944ab4771da78d97587, type: 3}
+  pointerSelected: {fileID: 21300000, guid: 1be9c04a84e3b684d86b5211d1266005, type: 3}
+  moveDelay: 0.125
   colors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
@@ -1211,6 +1214,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthWinStateManager: {fileID: 1515312069}
+  canPlayerAttack: 1
+  canEnemyAttack: 1
 --- !u!1 &1545733070
 GameObject:
   m_ObjectHideFlags: 0
