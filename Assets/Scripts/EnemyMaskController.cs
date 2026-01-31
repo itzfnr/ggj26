@@ -27,7 +27,7 @@ public class EnemyMaskController : MonoBehaviour
 
     void OnDebugSwitchMask(InputValue value)
     {
-        healthWinStateManager.DealDamage(1);
+        healthWinStateManager.DealDamageToPlayer(1);
 
         Texture2D spriteTexture = maskTextures[Random.Range(0, maskTextures.Length)];
 
@@ -43,6 +43,6 @@ public class EnemyMaskController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        debugText.text = "Health: " + healthWinStateManager.GetHealth().ToString();
+        debugText.text = "Player Health: " + healthWinStateManager.GetPlayerHealth().ToString() + " ::: " + "Enemy Health: " + healthWinStateManager.GetEnemyHealth().ToString();
     }
 }

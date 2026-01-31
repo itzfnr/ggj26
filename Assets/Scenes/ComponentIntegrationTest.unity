@@ -394,7 +394,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: -0.033041645}
+  m_margin: {x: -4.036518, y: 0, z: 0.0000007165901, w: -0.033041645}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0
@@ -461,8 +461,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -3.925, y: -3.35}
-  m_SizeDelta: {x: 2.6755, y: 0.6567}
+  m_AnchoredPosition: {x: -1.9138, y: -3.35}
+  m_SizeDelta: {x: 6.698, y: 0.6567}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &850717980
 GameObject:
@@ -1115,6 +1115,7 @@ GameObject:
   - component: {fileID: 1515312068}
   - component: {fileID: 1515312065}
   - component: {fileID: 1515312069}
+  - component: {fileID: 1515312070}
   m_Layer: 0
   m_Name: LevelController
   m_TagString: Untagged
@@ -1195,7 +1196,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe3228f0e877764aabcc37dfab7b2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialHealth: 10
+  initialEnemyHealth: 10
+  initialPlayerHealth: 10
+--- !u!114 &1515312070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515312064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80561529d70703444ae973fd0129921d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthWinStateManager: {fileID: 1515312069}
 --- !u!1 &1545733070
 GameObject:
   m_ObjectHideFlags: 0

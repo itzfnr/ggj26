@@ -55,7 +55,7 @@ public class NarrationController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int health = healthWinStateManager.GetHealth();
+        int health = healthWinStateManager.GetEnemyHealth();
 
         // get text from narration object.
         TMP_Text narrationText = GetComponent<TMP_Text>();
@@ -63,9 +63,9 @@ public class NarrationController : MonoBehaviour
         if (health != prevHealth)
         {
             // temp health example
-            if (health <= healthWinStateManager.initialHealth / 2)
+            if (health <= healthWinStateManager.initialEnemyHealth / 2)
             {
-                if (health <= healthWinStateManager.initialHealth / 4)
+                if (health <= healthWinStateManager.initialEnemyHealth / 4)
                 {
                     // player at critical health!
                     taunts = criticalTaunts;
