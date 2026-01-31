@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Grid : MonoBehaviour
 {
@@ -9,6 +10,15 @@ public class Grid : MonoBehaviour
     public float xOffset, yOffset; // X and Y offset of the grid
 
     public GameObject tile; // Tile prefab for creating the tile grid
+    public GameObject pointer;
+
+    public InputActionAsset inputs;
+    private InputAction pointerMove;
+
+    private Vector2 pointerPosition;
+
+    private float moveTimer = 0.0f;
+    private float moveDelay = 0.2f;
 
     public List<Color> colors; // Possible colours that a tile can be
     public List<GameObject> tiles; // List of tiles currently active on the grid
@@ -21,6 +31,11 @@ public class Grid : MonoBehaviour
 
         Color[] previousLeft = new Color[ySize]; // Array of previous colours on the left side
         Color previousBelow = default; // Previous colour on the bottom side
+
+        pointerMove = inputs.FindAction("PointerMove");
+
+        pointerPosition = new Vector3(-xSize / 2, -ySize / 2, pointer.transform.position.z);
+        pointer.transform.position = pointerPosition;
 
         for (int x = -xSize / 2; x < xSize / 2; x++)
         {
@@ -42,5 +57,26 @@ public class Grid : MonoBehaviour
                 previousBelow = newColor; // Same as above for the one below
             }
         }
+    }
+
+    private void Update()
+    {
+        if (moveTimer <= 0.0f)
+        {
+            pointerPosition += pointerMove.ReadValue<Vector2>();
+            pointer.transform.position = pointerPosition;
+            moveTimer = moveDelay;
+            Debug.Log(pointerMove.ReadValue<Vector2>());
+        }
+
+        if (moveTimer > 0.0f)
+        {
+            moveTimer -= Time.deltaTime;
+        }
+    }
+
+    void TileSwap(SpriteRenderer sprite)
+    {
+
     }
 }
