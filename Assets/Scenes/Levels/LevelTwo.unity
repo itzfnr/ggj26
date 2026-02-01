@@ -1571,7 +1571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe3228f0e877764aabcc37dfab7b2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialEnemyHealth: 50
+  initialEnemyHealth: 40
   initialPlayerHealth: 50
   playerHealthBarGradient: {fileID: 2055463436}
   enemyHealthBarGradient: {fileID: 191997127}

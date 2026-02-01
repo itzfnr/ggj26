@@ -14,12 +14,20 @@ public class HealthWinStateManager : MonoBehaviour
     private int enemyHealth = 0;
     private int playerHealth = 0;
 
+    // gradient for player health
+    public GameObject playerHealthBarGradient;
+    public GameObject enemyHealthBarGradient;
+
+    private float maxScaleX = 0.9914f;
+
     // Start is called before the first frame update
     void Start()
     {
         // set health based on initial health setting.
         enemyHealth = initialEnemyHealth;
         playerHealth = initialPlayerHealth;
+
+        
     }
 
     // read only get function for health.
@@ -90,5 +98,26 @@ public class HealthWinStateManager : MonoBehaviour
                 SceneManager.LoadScene("LevelComplete");
             }
         }
+
+        // --- SPRITE HEALTH BAR UPDATE ---
+
+        // 1. Player Sprite Bar
+        // Ensure float division and clamp between 0 and 1
+        float playerHealthRatio = Mathf.Clamp01((float)playerHealth / (float)initialPlayerHealth);
+        float playerNewX = playerHealthRatio * 0.9914f; // Using your exact literal value
+
+        // Access the player bar's current scale, modify ONLY X, and put it back
+        Vector3 pScale = playerHealthBarGradient.transform.localScale;
+        pScale.x = playerNewX;
+        playerHealthBarGradient.transform.localScale = pScale;
+
+        // 2. Enemy Sprite Bar
+        float enemyHealthRatio = Mathf.Clamp01((float)enemyHealth / (float)initialEnemyHealth);
+        float enemyNewX = enemyHealthRatio * 0.9914f;
+
+        // Access the enemy bar's current scale, modify ONLY X, and put it back
+        Vector3 eScale = enemyHealthBarGradient.transform.localScale;
+        eScale.x = enemyNewX;
+        enemyHealthBarGradient.transform.localScale = eScale;
     }
 }

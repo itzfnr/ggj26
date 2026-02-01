@@ -245,6 +245,76 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "Demo",
+            "id": "5b37a239-4677-436b-b906-063583c4716f",
+            "actions": [
+                {
+                    "name": "DebugDemoResetOne",
+                    "type": "Button",
+                    "id": "c931d72b-b68f-44d8-b4da-84482034de94",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "DebugDemoResetTwo",
+                    "type": "Button",
+                    "id": "ba45dcca-2b04-4e1f-a7e1-5a70fda88e1d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e4c2178f-d49c-4f0b-a161-8e20f08a542e",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;Gamepad",
+                    "action": "DebugDemoResetOne",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "36a860c3-7826-456b-94a6-be1c1da7aac8",
+                    "path": "<XInputController>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "DebugDemoResetOne",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a5b0d6e7-d14f-4f2f-9511-a9fe9a15db0f",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;Gamepad",
+                    "action": "DebugDemoResetTwo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "225cb71e-c84c-4253-9e4d-f2186f26e99a",
+                    "path": "<XInputController>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "DebugDemoResetTwo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

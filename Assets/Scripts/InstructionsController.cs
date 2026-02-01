@@ -4,20 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MenuController : MonoBehaviour
+public class InstructionsController : MonoBehaviour
 {
     // play button
     public Button playButton;
-
-    // instructions button
-    public Button instructionsButton;
 
     // Start is called before the first frame update
     void Start()
     {
         playButton.onClick.AddListener(OnPlayButtonClick);
-        instructionsButton.onClick.AddListener(OnInstructionsButtonClick);
-
     }
 
     // Update is called once per frame
@@ -28,12 +23,7 @@ public class MenuController : MonoBehaviour
 
     void OnPlayButtonClick()
     {
-        SceneManager.LoadScene("MapArea");
+        SceneManager.LoadScene("MenuScene");
     }
-
-    void OnInstructionsButtonClick()
-    {
-        SceneManager.LoadScene("InstructionScene");
-    }
-
+    
 }

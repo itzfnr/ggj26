@@ -279,7 +279,7 @@ public class LightningAttack : Attack
 
     public override void OnAttackStart()
     {
-        this.DoDamage(this.attackTarget, Random.Range(1, 3));
+        this.DoDamage(this.attackTarget, Random.Range(2,5));
         this.isAttackOver = true;
     }
 
