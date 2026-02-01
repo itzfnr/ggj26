@@ -35,6 +35,8 @@ public class TileGrid : MonoBehaviour
 
     public List<Sprite> availableTileSprites;
 
+    public List<GameObject> particles;
+
     // AudioClips for UI.
     public AudioClip uiSelectSound;
     public AudioClip uiDeselectSound;
@@ -204,5 +206,30 @@ public class TileGrid : MonoBehaviour
         CreateGrid();
         refreshActive = false;
         haltAction = false;
+    }
+
+    public void CreateParticles(string name, GameObject tiles)
+    {
+        GameObject particle = null;
+        switch (name)
+        {
+            case "red_mask":
+                particle = Instantiate(particles[0], tiles.transform.position, tiles.transform.rotation);
+                break;
+            case "water_mask":
+                particle = Instantiate(particles[1], tiles.transform.position, tiles.transform.rotation);
+                break;
+            case "earth_mask":
+                particle = Instantiate(particles[2], tiles.transform.position, tiles.transform.rotation);
+                break;
+            case "lightning_mask":
+                particle = Instantiate(particles[3], tiles.transform.position, tiles.transform.rotation);
+                break;
+        }
+        if (particle != null)
+        {
+            float duration = particle.GetComponent<ParticleSystem>().main.duration;
+            Destroy(particle, duration);
+        }
     }
 }
