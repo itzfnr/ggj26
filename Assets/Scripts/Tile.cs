@@ -95,10 +95,10 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void ClearAllMatches()
+    public bool ClearAllMatches()
     {
         if (spriteRenderer.sprite == null)
-            return;
+            return false;
 
         ClearMatch(new Vector2[2] { Vector2.left, Vector2.right });
         ClearMatch(new Vector2[2] { Vector2.up, Vector2.down });
@@ -108,6 +108,8 @@ public class Tile : MonoBehaviour
             attackManager.OnAttack(gameObject.GetComponent<SpriteRenderer>().sprite.name);
             spriteRenderer.sprite = null;
             matchFound = false;
+            return true;
         }
+        return false;
     }
 }
