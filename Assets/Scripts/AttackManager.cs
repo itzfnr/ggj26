@@ -146,6 +146,14 @@ public class FireAttack : Attack
         // TODO: give whoever their fire effect.
         attackLength = Random.Range(3000, 5000);
         attackStartTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        if (attackTarget == AttackTarget.Enemy)
+        {
+            attackManager.isFireAttackActiveOnEnemy = true;
+        } else
+        {
+            attackManager.isFireAttackActiveOnPlayer = true;
+        }
     }
 
     private long timeSinceLastFireHit = 0;
@@ -168,6 +176,15 @@ public class FireAttack : Attack
         {
             // Attack done.
             this.isAttackOver = true;
+
+            if (attackTarget == AttackTarget.Enemy)
+            {
+                attackManager.isFireAttackActiveOnEnemy = false;
+            }
+            else
+            {
+                attackManager.isFireAttackActiveOnPlayer = false;
+            }
         }
     }
 }
@@ -290,6 +307,9 @@ public class AttackManager : MonoBehaviour
     public bool isNatureAttackActiveOnEnemy = false;
     public bool isNatureAttackActiveOnPlayer = false;
 
+    public bool isFireAttackActiveOnEnemy = false;
+    public bool isFireAttackActiveOnPlayer = false;
+
     private long enemyLastAttackTime = 0;
     private int timeEnemyShouldWaitBeforeAttack;
 
@@ -304,6 +324,10 @@ public class AttackManager : MonoBehaviour
     public GameObject emenyStoneShield;
     public GameObject playerStoneShield;
 
+    // fire
+    public GameObject enemyFire;
+    public GameObject playerFire;
+
     void Start()
     {
         audioSource = gameObject.GetComponent<AudioSource>();
@@ -311,7 +335,7 @@ public class AttackManager : MonoBehaviour
         timeEnemyShouldWaitBeforeAttack = Random.Range(3000, 7500);
     }
 
-    private string[] enemyAttacks = { "red_mask", "water_mask", "earth_mask", "lightning_mask" };
+    private string[] enemyAttacks = { "red_mask", "earth_mask", "lightning_mask" };
 
     // Unity functions.
     void Update()
@@ -343,6 +367,10 @@ public class AttackManager : MonoBehaviour
         // set visibility of stones.
         emenyStoneShield.SetActive(this.isNatureAttackActiveOnEnemy);
         playerStoneShield.SetActive(this.isNatureAttackActiveOnPlayer);
+
+        // set visibility of fire.
+        enemyFire.SetActive(this.isFireAttackActiveOnEnemy);
+        playerFire.SetActive(this.isFireAttackActiveOnPlayer);
 
         // check enemy attack.
         if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - enemyLastAttackTime >= timeEnemyShouldWaitBeforeAttack)
