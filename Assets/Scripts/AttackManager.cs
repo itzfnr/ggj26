@@ -112,10 +112,10 @@ public class WaterAttack : Attack
     {
         if (this.attackTarget == AttackTarget.Player)
         {
-            this.healthWinStateManager.HealPlayer(Random.Range(3, 8));
+            this.healthWinStateManager.HealPlayer(Random.Range(4, 9));
         } else
         {
-            this.healthWinStateManager.HealEnemy(Random.Range(3, 8));
+            this.healthWinStateManager.HealEnemy(Random.Range(4, 9));
         }
 
         this.isAttackOver = true;
@@ -144,7 +144,7 @@ public class FireAttack : Attack
     public override void OnAttackStart()
     {
         // TODO: give whoever their fire effect.
-        attackLength = Random.Range(3000, 5000);
+        attackLength = Random.Range(5000, 7000);
         attackStartTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
         if (attackTarget == AttackTarget.Enemy)
@@ -211,7 +211,7 @@ public class EarthAttack : Attack
         // do immediete damage between 3-5pt.
         if (this.canAttack)
         {
-            this.DoDamage(this.attackTarget, Random.Range(3, 5));
+            this.DoDamage(this.attackTarget, Random.Range(1, 4));
         }
 
         // freeze whoever was hit
@@ -279,7 +279,7 @@ public class LightningAttack : Attack
 
     public override void OnAttackStart()
     {
-        this.DoDamage(this.attackTarget, Random.Range(1, 3));
+        this.DoDamage(this.attackTarget, Random.Range(3, 6));
         this.isAttackOver = true;
     }
 
