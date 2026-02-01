@@ -175,16 +175,19 @@ public class TileGrid : MonoBehaviour
 
         tileA.GetComponent<Tile>().ClearAllMatches();
         tileB.GetComponent<Tile>().ClearAllMatches();
+        if (tileA.GetComponent<Tile>().ClearAllMatches() || tileB.GetComponent<Tile>().ClearAllMatches())
+        {
+            StartCoroutine(Matched());
+        }
 
         pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
-
-        StartCoroutine(Refresh());
     }
 
-    IEnumerator Refresh()
+    IEnumerator Matched()
     {
+
         yield return new WaitForSeconds(refreshDelay);
-        foreach(GameObject tile in tiles)
+        foreach (GameObject tile in tiles)
         {
             Destroy(tile);
         }
