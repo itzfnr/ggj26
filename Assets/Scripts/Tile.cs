@@ -10,6 +10,7 @@ public class Tile : MonoBehaviour
     private bool matchFound = false;
 
     public AttackManager attackManager;
+    public TileGrid tileGrid;
 
     private void Start()
     {
@@ -18,6 +19,9 @@ public class Tile : MonoBehaviour
         // Get attack manager.
         GameObject levelController = GameObject.Find("LevelController");
         attackManager = levelController.GetComponent<AttackManager>();
+
+        GameObject board = GameObject.Find("Board");
+        tileGrid = board.GetComponent<TileGrid>();
     }
 
     public void Selected()
@@ -95,10 +99,10 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public bool ClearAllMatches()
+    public void ClearAllMatches()
     {
         if (spriteRenderer.sprite == null)
-            return false;
+            return;
 
         ClearMatch(new Vector2[2] { Vector2.left, Vector2.right });
         ClearMatch(new Vector2[2] { Vector2.up, Vector2.down });
@@ -106,10 +110,9 @@ public class Tile : MonoBehaviour
         if (matchFound)
         {
             attackManager.OnAttack(gameObject.GetComponent<SpriteRenderer>().sprite.name);
+            StartCoroutine(tileGrid.Matched());
             spriteRenderer.sprite = null;
             matchFound = false;
-            return true;
         }
-        return false;
     }
 }
