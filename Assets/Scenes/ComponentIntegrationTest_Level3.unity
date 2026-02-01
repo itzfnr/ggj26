@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47fc17c41eff5424fa62dac4797ec233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelToMarkCompleted: 2
+  levelToMarkCompleted: 3
   mapSceneName: Map_area
 --- !u!1 &783767901
 GameObject:
