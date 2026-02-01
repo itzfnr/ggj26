@@ -26,7 +26,16 @@ public class DebugResetter : MonoBehaviour
         // 2. Save the deletion (good practice to ensure it writes to disk immediately)
         PlayerPrefs.Save();
 
-        Debug.Log("PlayerPrefs cleared! Returning to Menu...");
+        // 1. Find the persistent DemoController and play its audio
+        DemoController demo = FindObjectOfType<DemoController>();
+        if (demo != null)
+        {
+            AudioSource audio = demo.GetComponent<AudioSource>();
+            if (audio != null)
+            {
+                audio.Play();
+            }
+        }
 
         // 3. Return to the MenuScene
         SceneManager.LoadScene("MenuScene");

@@ -18,6 +18,15 @@ EditorBuildSettings:
     path: Assets/Scenes/DebugScene.unity
     guid: 964cc8399b2c7704f92d53eeaae07a70
   - enabled: 1
+    path: Assets/Scenes/Levels/LevelThree.unity
+    guid: 10b2cb87fd3afe94eb2e3f82c9609e48
+  - enabled: 1
+    path: Assets/Scenes/Levels/LevelTwo.unity
+    guid: ca5e27c212e87984fb890d5801193f95
+  - enabled: 1
+    path: Assets/Scenes/Levels/LevelOne.unity
+    guid: 5ed87ee2e9813b14b92d880659bc5cea
+  - enabled: 1
     path: Assets/Scenes/LevelComplete.unity
     guid: c06a293444346e742978937d2d6bc57d
   - enabled: 1
