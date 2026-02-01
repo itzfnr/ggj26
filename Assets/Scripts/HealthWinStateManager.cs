@@ -71,13 +71,28 @@ public class HealthWinStateManager : MonoBehaviour
 
     public int HealPlayer(int healPoints)
     {
-        playerHealth += healPoints;
+        if (playerHealth + healPoints > initialPlayerHealth)
+        {
+            playerHealth = initialPlayerHealth;
+        } else
+        {
+            playerHealth += healPoints;
+        }
+        
         return playerHealth;
     }
 
     public int HealEnemy(int healPoints)
     {
-        enemyHealth += healPoints;
+        if (enemyHealth + healPoints > initialEnemyHealth)
+        {
+            enemyHealth = initialEnemyHealth;
+        }
+        else
+        {
+            enemyHealth += healPoints;
+        }
+
         return enemyHealth;
     }
 
