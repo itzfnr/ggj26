@@ -26,9 +26,10 @@ public class TileGrid : MonoBehaviour
     private float moveTimer = 0.0f;
     public float moveDelay = 0.125f;
 
-    public float refreshDelay = 3.0f;
-
+    public float refreshDelay = 1.0f;
     private bool refreshActive;
+
+    public bool haltAction;
 
     public List<GameObject> tiles; // List of tiles currently active on the grid
 
@@ -92,18 +93,26 @@ public class TileGrid : MonoBehaviour
 
     private void Update()
     {
-        if (!refreshActive && moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
+        if (!haltAction && moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
         {
             pointerPosition += pointerMove.ReadValue<Vector2>();
             if (previousTile == null)
             {
-                pointerPosition.x = Mathf.Clamp(pointerPosition.x, (-xSize / 2) - xOffset, (xSize / 2) - 1 - xOffset);
-                pointerPosition.y = Mathf.Clamp(pointerPosition.y, (-ySize / 2) - yOffset, (ySize / 2) - 1 - yOffset);
+                pointerPosition.x = Mathf.Clamp(pointerPosition.x, 
+                    (-xSize / 2) - xOffset, 
+                    (xSize / 2) - 1 - xOffset);
+                pointerPosition.y = Mathf.Clamp(pointerPosition.y, 
+                    (-ySize / 2) - yOffset, 
+                    (ySize / 2) - 1 - yOffset);
             }
             else
             {
-                pointerPosition.x = Mathf.Clamp(pointerPosition.x, previousTile.transform.position.x - 1, previousTile.transform.position.x + 1);
-                pointerPosition.y = Mathf.Clamp(pointerPosition.y, previousTile.transform.position.y - 1, previousTile.transform.position.y + 1);
+                pointerPosition.x = Mathf.Clamp(pointerPosition.x, 
+                    previousTile.transform.position.x <= (-xSize / 2) - xOffset ? previousTile.transform.position.x : previousTile.transform.position.x - 1,
+                    previousTile.transform.position.x >= (xSize / 2) - 1 - xOffset ? previousTile.transform.position.x : previousTile.transform.position.x + 1);
+                pointerPosition.y = Mathf.Clamp(pointerPosition.y,
+                    previousTile.transform.position.y <= (-ySize / 2) - yOffset ? previousTile.transform.position.y : previousTile.transform.position.y - 1,
+                    previousTile.transform.position.y >= (ySize / 2) - 1 - yOffset ? previousTile.transform.position.y : previousTile.transform.position.y + 1);
             }
             pointer.transform.position = pointerPosition;
             moveTimer = moveDelay;
@@ -117,7 +126,7 @@ public class TileGrid : MonoBehaviour
             moveTimer -= Time.deltaTime;
         }
 
-        if (!refreshActive && selectTile.triggered)
+        if (!haltAction && selectTile.triggered)
         {
             foreach (GameObject tile in tiles)
             {
@@ -134,6 +143,7 @@ public class TileGrid : MonoBehaviour
                             // deselect
                             audioSource.PlayOneShot(uiDeselectSound, uiVolume);
                             tileObject.Deselect();
+                            previousTile = null;
                             pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
                         }
                         else
@@ -155,6 +165,7 @@ public class TileGrid : MonoBehaviour
                                     TileSwap(previousTile, tile); // Perform the swap
                                     previousTile.GetComponent<Tile>().Deselect();
                                     previousTile = null;
+                                    pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
                                 }
                             }
                         }
@@ -176,13 +187,12 @@ public class TileGrid : MonoBehaviour
 
         tileA.GetComponent<Tile>().ClearAllMatches();
         tileB.GetComponent<Tile>().ClearAllMatches();
-
-        pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
     }
 
     public IEnumerator Matched()
     {
         refreshActive = true;
+        haltAction = true;
 
         yield return new WaitForSeconds(refreshDelay);
 
@@ -193,5 +203,6 @@ public class TileGrid : MonoBehaviour
         tiles = new List<GameObject>();
         CreateGrid();
         refreshActive = false;
+        haltAction = false;
     }
 }
