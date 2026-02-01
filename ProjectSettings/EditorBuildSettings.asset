@@ -20,7 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ComponentIntegrationTest_Level2.unity
     guid: 5a275a340e861564aa2638901ef2db98
-    path: Assets/Scenes/GameOverScene.unity
-    guid: 12c536fc949bfd844bf3e4d926e4581b
+  - enabled: 1
+    path: Assets/Scenes/ComponentIntegrationTest_Level3.unity
+    guid: 6579d5f2b3bcda647a260d5994f37b0f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: fd91931c106d6ac43996e7f8b025229d, type: 3}

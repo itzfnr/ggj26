@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47fc17c41eff5424fa62dac4797ec233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelToMarkCompleted: 2
+  levelToMarkCompleted: 3
   mapSceneName: Map_area
 --- !u!1 &783767901
 GameObject:
@@ -749,11 +749,16 @@ MonoBehaviour:
   tile: {fileID: 1775235784856912199, guid: d8d20172aa5f618439f555fb3a372104, type: 3}
   pointer: {fileID: 1747174301}
   inputs: {fileID: -944628639613478452, guid: fd91931c106d6ac43996e7f8b025229d, type: 3}
+  pointerDefault: {fileID: 0}
+  pointerSelected: {fileID: 0}
+  moveDelay: 0.125
+  refreshDelay: 3
   colors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
   tiles: []
+  availableTileSprites: []
 --- !u!212 &850717982
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1750,7 +1755,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fe3228f0e877764aabcc37dfab7b2c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialHealth: 10
+  initialEnemyHealth: 10
+  initialPlayerHealth: 10
 --- !u!1 &1545733070
 GameObject:
   m_ObjectHideFlags: 0
