@@ -969,6 +969,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 604d2b59d2d160545b35e1895d313cf4, type: 3}
   - {fileID: 21300000, guid: 20c17bb26197a10418e246abedd0de45, type: 3}
   - {fileID: 21300000, guid: 3b6eb47080eab2841b7ace04139b2575, type: 3}
+  particles:
+  - {fileID: 634930840710663877, guid: 9ae3add2c1739984cbd4ebe3c067c3df, type: 3}
+  - {fileID: 634930840710663877, guid: da85bd9f73f930a4e8186ef73e419525, type: 3}
+  - {fileID: 634930840710663877, guid: 81a1c5767a9879c43a3ba9ebb21e1560, type: 3}
+  - {fileID: 634930840710663877, guid: ee7577e54f4dbd349bae61efe94bc950, type: 3}
   uiSelectSound: {fileID: 8300000, guid: 4e01abdcd58f3d646a2a7a8775416958, type: 3}
   uiDeselectSound: {fileID: 8300000, guid: 48bef777e7cb40945956a53924fe868f, type: 3}
   uiMoveSound: {fileID: 8300000, guid: 7bbd18a9a08b2f64fab3b437c4ad5d2d, type: 3}

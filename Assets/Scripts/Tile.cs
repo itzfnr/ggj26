@@ -94,6 +94,8 @@ public class Tile : MonoBehaviour
             for (int i = 0; i < matchingTiles.Count; i++)
             {
                 matchingTiles[i].GetComponent<SpriteRenderer>().sprite = null;
+                tileGrid.CreateParticles(gameObject.GetComponent<SpriteRenderer>().sprite.name, gameObject);
+                tileGrid.CreateParticles(gameObject.GetComponent<SpriteRenderer>().sprite.name, matchingTiles[i]);
             }
             matchFound = true;
         }
