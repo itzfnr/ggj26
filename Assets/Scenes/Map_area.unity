@@ -536,6 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187ab8ebc3d98ab43b0ff58d7b702038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneName: ComponentIntegrationTest_Level3
   levelIndex: 3
 --- !u!1 &562881885
 GameObject:
@@ -817,6 +818,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187ab8ebc3d98ab43b0ff58d7b702038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneName: ComponentIntegrationTest
   levelIndex: 1
 --- !u!1 &701719805
 GameObject:
@@ -933,6 +935,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 901514224}
+  - component: {fileID: 901514225}
   m_Layer: 0
   m_Name: MapRoot
   m_TagString: Untagged
@@ -960,6 +963,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &901514225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901514223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3cb969d63e22094d860cb4f87ece469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  node2Button: {fileID: 1092896468}
+  line_1_2: {fileID: 982959368}
+  node3Button: {fileID: 520495472}
+  line_2_3: {fileID: 1631753185}
 --- !u!1 &982959368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1249,6 +1268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 187ab8ebc3d98ab43b0ff58d7b702038, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneName: ComponentIntegrationTest_Level2
   levelIndex: 2
 --- !u!1 &1243784643
 GameObject:
