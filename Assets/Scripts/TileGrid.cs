@@ -28,7 +28,8 @@ public class TileGrid : MonoBehaviour
 
     public float refreshDelay = 3.0f;
 
-    public List<Color> colors; // Possible colours that a tile can be
+    private bool refreshActive;
+
     public List<GameObject> tiles; // List of tiles currently active on the grid
 
     public List<Sprite> availableTileSprites;
@@ -91,7 +92,7 @@ public class TileGrid : MonoBehaviour
 
     private void Update()
     {
-        if (moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
+        if (!refreshActive && moveTimer <= 0.0f && (pointerMove.ReadValue<Vector2>().x != 0 || pointerMove.ReadValue<Vector2>().y != 0))
         {
             pointerPosition += pointerMove.ReadValue<Vector2>();
             if (previousTile == null)
@@ -116,7 +117,7 @@ public class TileGrid : MonoBehaviour
             moveTimer -= Time.deltaTime;
         }
 
-        if (selectTile.triggered)
+        if (!refreshActive && selectTile.triggered)
         {
             foreach (GameObject tile in tiles)
             {
@@ -175,24 +176,22 @@ public class TileGrid : MonoBehaviour
 
         tileA.GetComponent<Tile>().ClearAllMatches();
         tileB.GetComponent<Tile>().ClearAllMatches();
-        if (tileA.GetComponent<Tile>().ClearAllMatches() || tileB.GetComponent<Tile>().ClearAllMatches())
-        {
-            StartCoroutine(Matched());
-        }
 
         pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
     }
 
-    IEnumerator Matched()
+    public IEnumerator Matched()
     {
+        refreshActive = true;
 
         yield return new WaitForSeconds(refreshDelay);
+
         foreach (GameObject tile in tiles)
         {
             Destroy(tile);
         }
-
         tiles = new List<GameObject>();
         CreateGrid();
+        refreshActive = false;
     }
 }
