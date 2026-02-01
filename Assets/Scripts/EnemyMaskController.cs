@@ -25,7 +25,7 @@ public class EnemyMaskController : MonoBehaviour
         
     }
 
-    void OnDebugSwitchMask(InputValue value)
+    /*void OnDebugSwitchMask(InputValue value)
     {
         healthWinStateManager.DealDamageToPlayer(1);
 
@@ -38,7 +38,7 @@ public class EnemyMaskController : MonoBehaviour
         maskSprite.sprite = newSprite;
 
       
-    }
+    }*/
 
     // Update is called once per frame
     void Update()

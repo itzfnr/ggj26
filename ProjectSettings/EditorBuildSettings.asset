@@ -9,17 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuScene.unity
     guid: 70d7fd6cf75441b45b349cbd115e831f
   - enabled: 1
+    path: Assets/Scenes/InstructionScene.unity
+    guid: 7b6fb8b01be99e7479420094269d5b9c
+  - enabled: 1
     path: Assets/Scenes/MapArea.unity
     guid: 5e3b06baffa69b547b9f25697548fcbc
   - enabled: 1
-    path: Assets/Scenes/ComponentIntegrationTest.unity
-    guid: 9329fee4c7c9fa7429d102960db6cf41
-  - enabled: 1
-    path: Assets/Scenes/ComponentIntegrationTest_Level2.unity
-    guid: 88df786ba2a81274fb65423d0050ba35
-  - enabled: 1
-    path: Assets/Scenes/ComponentIntegrationTest_Level3.unity
-    guid: e062f9e9c4ed390448ec97d6a6260702
+    path: Assets/Scenes/DebugScene.unity
+    guid: 964cc8399b2c7704f92d53eeaae07a70
   - enabled: 1
     path: Assets/Scenes/LevelComplete.unity
     guid: c06a293444346e742978937d2d6bc57d
