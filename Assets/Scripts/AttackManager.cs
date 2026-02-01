@@ -276,31 +276,17 @@ public class AttackManager : MonoBehaviour
     private long enemyLastAttackTime = 0;
     private int timeEnemyShouldWaitBeforeAttack;
 
-    void DoWaterDamage(AttackTarget target)
-    {
-        WaterAttack newAttack = new WaterAttack(this, healthWinStateManager, target, true);
-        activeAttacks.Add(newAttack);
-    }
+    // audio clips
+    public AudioClip fireAttackSound;
+    public AudioClip waterAttackSound;
+    public AudioClip lightningAttackSound;
+    public AudioClip earthAttackSound;
 
-    void DoEarthDamage()
-    {
-
-    }
-
-    void DoFireDamage(AttackTarget target)
-    {
-        FireAttack newAttack = new FireAttack(this, healthWinStateManager, target, true);
-        activeAttacks.Add(newAttack);
-    }
-
-    void DoLightningDamage()
-    {
-
-    }
+    private AudioSource audioSource;
 
     void Start()
     {
-       
+        audioSource = gameObject.GetComponent<AudioSource>();
     }
 
     // Unity functions.
@@ -340,18 +326,22 @@ public class AttackManager : MonoBehaviour
             case "red_mask":
                 if (!canPlayerAttack) { Debug.Log("Player can't attack right now!"); return; }
                 activeAttacks.Add(new FireAttack(this, healthWinStateManager, AttackTarget.Enemy, true));
+                audioSource.PlayOneShot(fireAttackSound, 1f);
                 break;
             case "water_mask":
                 // player can heal irrespective of being able to attack.
                 activeAttacks.Add(new WaterAttack(this, healthWinStateManager, AttackTarget.Player, true));
+                audioSource.PlayOneShot(waterAttackSound, 1f);
                 break;
             case "earth_mask":
                 if (!canPlayerAttack) { Debug.Log("Player can't attack right now!"); return; }
                 activeAttacks.Add(new EarthAttack(this, healthWinStateManager, AttackTarget.Enemy, true));
+                audioSource.PlayOneShot(earthAttackSound, 1f);
                 break;
             case "lightning_mask":
                 if (!canPlayerAttack) { Debug.Log("Player can't attack right now!"); return; }
                 activeAttacks.Add(new LightningAttack(this, healthWinStateManager, AttackTarget.Enemy, true));
+                audioSource.PlayOneShot(lightningAttackSound, 1f);
                 break;
         }
     }
