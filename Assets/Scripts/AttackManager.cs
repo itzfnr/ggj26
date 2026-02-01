@@ -44,7 +44,10 @@ public abstract class Attack
     // attack manager reference
     public AttackManager attackManager { get; set; }
 
-    public Attack(AttackManager attackManagerObj, string name, AttackTarget target, HealthWinStateManager healthWinStateManagerObj, bool activeOnStart)
+    // can the attacker attack?
+    public bool canAttack { get; set; }
+
+    public Attack(AttackManager attackManagerObj, string name, AttackTarget target, HealthWinStateManager healthWinStateManagerObj, bool activeOnStart, bool canAttackTarget)
     {
         healthWinStateManager = healthWinStateManagerObj;
         attackManager = attackManagerObj;
@@ -55,6 +58,9 @@ public abstract class Attack
 
         isAttackOver = false;
 
+        // assume yes.
+        canAttack = canAttackTarget;
+
         // If attack to be activated on start trigger activation.
         if (attackActive)
         {
@@ -64,7 +70,7 @@ public abstract class Attack
 
     // Abstract classes for the updates
     public abstract void OnAttackStart();
-    public abstract void OnAttackUpdate();
+    public abstract void OnAttackUpdate(bool canAttackerAttack);
 
     // Function to deal damage based on target
     public int DoDamage(AttackTarget target, int damagePoints)
@@ -95,8 +101,8 @@ public abstract class Attack
 
 public class WaterAttack : Attack
 {
-    public WaterAttack(AttackManager attackManager, HealthWinStateManager healthWinStateManagerObj, AttackTarget target, bool active)
-        :base(attackManager, "Healing Water Swirl", target, healthWinStateManagerObj, active)
+    public WaterAttack(AttackManager attackManager, HealthWinStateManager healthWinStateManagerObj, AttackTarget target, bool active, bool canAttack)
+        :base(attackManager, "Healing Water Swirl", target, healthWinStateManagerObj, active, canAttack)
     {
         this.isAttackOneshot = true;
         this.isPassiveAttack = true;
@@ -115,7 +121,7 @@ public class WaterAttack : Attack
         this.isAttackOver = true;
     }
 
-    public override void OnAttackUpdate()
+    public override void OnAttackUpdate(bool canAttackerAttack)
     {
         // This is a one-shot attack so doesn't have any special recurring effect.
         return;
@@ -124,8 +130,8 @@ public class WaterAttack : Attack
 
 public class FireAttack : Attack
 {
-    public FireAttack(AttackManager attackManager, HealthWinStateManager healthWinStateManagerObj, AttackTarget target, bool active)
-        : base(attackManager, "Hellspawn's Fire", target, healthWinStateManagerObj, active)
+    public FireAttack(AttackManager attackManager, HealthWinStateManager healthWinStateManagerObj, AttackTarget target, bool active, bool canAttack)
+        : base(attackManager, "Hellspawn's Fire", target, healthWinStateManagerObj, active, canAttack)
     {
         this.isAttackOneshot = false;
         this.isPassiveAttack = false;
@@ -144,14 +150,18 @@ public class FireAttack : Attack
 
     private long timeSinceLastFireHit = 0;
 
-    public override void OnAttackUpdate()
+    public override void OnAttackUpdate(bool canAttackerAttack)
     {
+        this.canAttack = canAttackerAttack;
         if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - timeSinceLastFireHit >= Random.Range(1000,2000))
         {
             timeSinceLastFireHit = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             // Deal damage.
-            this.DoDamage(this.attackTarget, 1);
+           if (this.canAttack)
+            {
+                this.DoDamage(this.attackTarget, 1);
+            }
         }
 
         if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - attackStartTime >= attackLength)
@@ -164,8 +174,8 @@ public class FireAttack : Attack
 
 public class EarthAttack : Attack
 {
-    public EarthAttack(AttackManager attackManager, HealthWinStateManager healthWinStateManagerObj, AttackTarget target, bool active)
-        : base(attackManager, "Nature's Wrath", target, healthWinStateManagerObj, active)
+    public EarthAttack(AttackManager attackManager, HealthWinStateManager healthWinStateManagerObj, AttackTarget target, bool active, bool canAttack)
+        : base(attackManager, "Nature's Wrath", target, healthWinStateManagerObj, active, canAttack)
     {
         this.isAttackOneshot = false;
         this.isPassiveAttack = false;
@@ -182,33 +192,36 @@ public class EarthAttack : Attack
         attackStartTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
         // do immediete damage between 3-5pt.
-        this.DoDamage(this.attackTarget, Random.Range(3,5));
+        if (this.canAttack)
+        {
+            this.DoDamage(this.attackTarget, Random.Range(3, 5));
+        }
 
         // freeze whoever was hit
         if (this.attackTarget == AttackTarget.Player)
         {
             // player is being attacked freeze them.
-            if (this.attackManager.isNatureAttackActiveOnPlayer)
+            if (this.attackManager.isNatureAttackActiveOnEnemy)
             {
                 // don't freeze again
                 this.isAttackOver = true;
             } else
             {
-                this.attackManager.isNatureAttackActiveOnPlayer = true;
+                this.attackManager.isNatureAttackActiveOnEnemy = true;
                 this.attackManager.canPlayerAttack = false;
             }
             
         }
         else
         {
-            if (this.attackManager.isNatureAttackActiveOnEnemy)
+            if (this.attackManager.isNatureAttackActiveOnPlayer)
             {
                 // don't freeze again
                 this.isAttackOver = true;
             }
             else
             {
-                this.attackManager.isNatureAttackActiveOnEnemy = true;
+                this.attackManager.isNatureAttackActiveOnPlayer = true;
                 this.attackManager.canEnemyAttack = false;
             }
         }
@@ -216,18 +229,21 @@ public class EarthAttack : Attack
 
     private long timeSinceLastFireHit = 0;
 
-    public override void OnAttackUpdate()
+    public override void OnAttackUpdate(bool canAttackerAttack)
     {
+        this.canAttack = canAttackerAttack;
         if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - attackStartTime >= attackLength)
         {
             if (this.attackTarget == AttackTarget.Player)
             {
                 // player is being attacked unfreeze them.
                 this.attackManager.canPlayerAttack = true;
+                this.attackManager.isNatureAttackActiveOnEnemy = false;
             }
             else
             {
                 this.attackManager.canEnemyAttack = true;
+                this.attackManager.isNatureAttackActiveOnPlayer = false;
             }
 
             this.isAttackOver = true;
@@ -237,8 +253,8 @@ public class EarthAttack : Attack
 
 public class LightningAttack : Attack
 {
-    public LightningAttack(AttackManager attackManager, HealthWinStateManager healthWinStateManagerObj, AttackTarget target, bool active)
-        : base(attackManager, "Zeus' Revenge", target, healthWinStateManagerObj, active)
+    public LightningAttack(AttackManager attackManager, HealthWinStateManager healthWinStateManagerObj, AttackTarget target, bool active, bool canAttack)
+        : base(attackManager, "Zeus' Revenge", target, healthWinStateManagerObj, active, canAttack)
     {
         this.isAttackOneshot = true;
         this.isPassiveAttack = false;
@@ -250,8 +266,9 @@ public class LightningAttack : Attack
         this.isAttackOver = true;
     }
 
-    public override void OnAttackUpdate()
+    public override void OnAttackUpdate(bool canAttackerAttack)
     {
+        this.canAttack = canAttackerAttack;
         // This is a one-shot attack so doesn't have any special recurring effect.
         return;
     }
@@ -281,13 +298,20 @@ public class AttackManager : MonoBehaviour
     public AudioClip waterAttackSound;
     public AudioClip lightningAttackSound;
     public AudioClip earthAttackSound;
-
     private AudioSource audioSource;
+
+    // stone shields
+    public GameObject emenyStoneShield;
+    public GameObject playerStoneShield;
 
     void Start()
     {
         audioSource = gameObject.GetComponent<AudioSource>();
+        enemyLastAttackTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        timeEnemyShouldWaitBeforeAttack = Random.Range(3000, 7500);
     }
+
+    private string[] enemyAttacks = { "red_mask", "water_mask", "earth_mask", "lightning_mask" };
 
     // Unity functions.
     void Update()
@@ -296,12 +320,12 @@ public class AttackManager : MonoBehaviour
         for (int i = 0; i < activeAttacks.Count; i++)
         {
             // only allow each type of attack player -> enemy etc. if the player/enemy is allowed to attack on this frame.
-            if (activeAttacks[i].attackTarget == AttackTarget.Enemy && canPlayerAttack)
+            if (activeAttacks[i].attackTarget == AttackTarget.Enemy)
             {
-                activeAttacks[i].OnAttackUpdate();
-            } else if (activeAttacks[i].attackTarget == AttackTarget.Player && canEnemyAttack)
+                activeAttacks[i].OnAttackUpdate(canPlayerAttack);
+            } else if (activeAttacks[i].attackTarget == AttackTarget.Player)
             {
-                activeAttacks[i].OnAttackUpdate();
+                activeAttacks[i].OnAttackUpdate(canEnemyAttack);
             }
             
         }
@@ -315,9 +339,47 @@ public class AttackManager : MonoBehaviour
                 activeAttacks.Remove(activeAttacks[i]);
             }
         }
+
+        // set visibility of stones.
+        emenyStoneShield.SetActive(this.isNatureAttackActiveOnEnemy);
+        playerStoneShield.SetActive(this.isNatureAttackActiveOnPlayer);
+
+        // check enemy attack.
+        if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - enemyLastAttackTime >= timeEnemyShouldWaitBeforeAttack)
+        {
+            // find a attack
+            string possibleAttack = enemyAttacks[Random.Range(0, enemyAttacks.Length)];
+            switch (possibleAttack)
+            {
+                case "red_mask":
+                    if (!canPlayerAttack) { Debug.Log("Enemy can't attack right now!"); return; }
+                    activeAttacks.Add(new FireAttack(this, healthWinStateManager, AttackTarget.Player, true, canEnemyAttack));
+                    audioSource.PlayOneShot(fireAttackSound, 1f);
+                    break;
+                case "water_mask":
+                    // enemy can heal irrespective of being able to attack.
+                    activeAttacks.Add(new WaterAttack(this, healthWinStateManager, AttackTarget.Enemy, true, true));
+                    audioSource.PlayOneShot(waterAttackSound, 1f);
+                    break;
+                case "earth_mask":
+                    activeAttacks.Add(new EarthAttack(this, healthWinStateManager, AttackTarget.Player, true, canEnemyAttack));
+                    audioSource.PlayOneShot(earthAttackSound, 1f);
+                    break;
+                case "lightning_mask":
+                    if (!canEnemyAttack) { Debug.Log("Enemy can't attack right now!"); return; }
+                    activeAttacks.Add(new LightningAttack(this, healthWinStateManager, AttackTarget.Player, true, canEnemyAttack));
+                    audioSource.PlayOneShot(lightningAttackSound, 1f);
+                    break;
+            }
+
+            // get it ready for refresh.
+            enemyLastAttackTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            timeEnemyShouldWaitBeforeAttack = Random.Range(3000, 7500);
+        }
+
     }
 
-    
+
     public void OnAttack(string spriteName)
     {
         Debug.Log(spriteName);
@@ -325,22 +387,21 @@ public class AttackManager : MonoBehaviour
         {
             case "red_mask":
                 if (!canPlayerAttack) { Debug.Log("Player can't attack right now!"); return; }
-                activeAttacks.Add(new FireAttack(this, healthWinStateManager, AttackTarget.Enemy, true));
+                activeAttacks.Add(new FireAttack(this, healthWinStateManager, AttackTarget.Enemy, true, canPlayerAttack));
                 audioSource.PlayOneShot(fireAttackSound, 1f);
                 break;
             case "water_mask":
                 // player can heal irrespective of being able to attack.
-                activeAttacks.Add(new WaterAttack(this, healthWinStateManager, AttackTarget.Player, true));
+                activeAttacks.Add(new WaterAttack(this, healthWinStateManager, AttackTarget.Player, true, true));
                 audioSource.PlayOneShot(waterAttackSound, 1f);
                 break;
             case "earth_mask":
-                if (!canPlayerAttack) { Debug.Log("Player can't attack right now!"); return; }
-                activeAttacks.Add(new EarthAttack(this, healthWinStateManager, AttackTarget.Enemy, true));
+                activeAttacks.Add(new EarthAttack(this, healthWinStateManager, AttackTarget.Enemy, true, canPlayerAttack));
                 audioSource.PlayOneShot(earthAttackSound, 1f);
                 break;
             case "lightning_mask":
                 if (!canPlayerAttack) { Debug.Log("Player can't attack right now!"); return; }
-                activeAttacks.Add(new LightningAttack(this, healthWinStateManager, AttackTarget.Enemy, true));
+                activeAttacks.Add(new LightningAttack(this, healthWinStateManager, AttackTarget.Enemy, true, canPlayerAttack));
                 audioSource.PlayOneShot(lightningAttackSound, 1f);
                 break;
         }
