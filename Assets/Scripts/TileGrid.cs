@@ -33,9 +33,23 @@ public class TileGrid : MonoBehaviour
 
     public List<Sprite> availableTileSprites;
 
+    // AudioClips for UI.
+    public AudioClip uiSelectSound;
+    public AudioClip uiDeselectSound;
+    public AudioClip uiMoveSound;
+
+    // AudioSource
+    private AudioSource audioSource;
+
+    // public for volume control of UI
+    public float uiVolume = 1f;
+
     // Start is called before the first frame update
     void Start()
     {
+        // Get audiosource.
+        audioSource = gameObject.GetComponent<AudioSource>();
+
         xSize = (int)transform.localScale.x; // Set the X size to the X scale of the grid
         ySize = (int)transform.localScale.y; // Set the Y size to the Y scale of the grid
 
@@ -92,6 +106,9 @@ public class TileGrid : MonoBehaviour
             }
             pointer.transform.position = pointerPosition;
             moveTimer = moveDelay;
+
+            // play move oneshot
+            audioSource.PlayOneShot(uiMoveSound, uiVolume);
         }
 
         if (moveTimer > 0.0f)
@@ -113,6 +130,8 @@ public class TileGrid : MonoBehaviour
                         // If the tile is already selected, deselect it
                         if (tileObject.isSelected)
                         {
+                            // deselect
+                            audioSource.PlayOneShot(uiDeselectSound, uiVolume);
                             tileObject.Deselect();
                             pointer.GetComponent<SpriteRenderer>().sprite = pointerDefault;
                         }
@@ -123,11 +142,15 @@ public class TileGrid : MonoBehaviour
                                 if (previousTile == null)
                                 {
                                     tileObject.Selected();
+                                    // on select play selected sound.
+                                    audioSource.PlayOneShot(uiSelectSound, uiVolume);
                                     previousTile = tile;
                                     pointer.GetComponent<SpriteRenderer>().sprite = pointerSelected;
                                 }
                                 else
                                 {
+                                    // deselect.
+                                    audioSource.PlayOneShot(uiDeselectSound, uiVolume);
                                     TileSwap(previousTile, tile); // Perform the swap
                                     previousTile.GetComponent<Tile>().Deselect();
                                     previousTile = null;

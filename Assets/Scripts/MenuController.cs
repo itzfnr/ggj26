@@ -23,7 +23,7 @@ public class MenuController : MonoBehaviour
 
     void OnPlayButtonClick()
     {
-        SceneManager.LoadScene("ComponentIntegrationTest");
+        SceneManager.LoadScene("MapArea");
     }
     
 }
